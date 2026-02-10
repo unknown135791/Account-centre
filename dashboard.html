@@ -1,0 +1,117 @@
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>User Dashboard</title>    <style>  
+    body {  
+      margin: 0;  
+      font-family: Arial, sans-serif;  
+      background: #f2f2f2;  
+      min-height: 100vh;  
+      display: flex;  
+      justify-content: center;  
+      align-items: center;  
+      padding: 20px;  
+      box-sizing: border-box;  
+    }  
+  
+    .dashboard {  
+      background: white;  
+      width: 100%;  
+      max-width: 900px;  
+      border-radius: 20px;  
+      box-shadow: 0 25px 60px rgba(0,0,0,0.2);  
+      padding: 40px;  
+      box-sizing: border-box;  
+    }  
+  
+    .header {  
+      display: flex;  
+      justify-content: space-between;  
+      align-items: center;  
+      margin-bottom: 30px;  
+    }  
+  
+    .header h1 {  
+      font-size: 36px;  
+      margin: 0;  
+    }  
+  
+    .logout-btn {  
+      padding: 12px 20px;  
+      font-size: 16px;  
+      border-radius: 8px;  
+      border: none;  
+      background: #dc3545;  
+      color: white;  
+      cursor: pointer;  
+    }  
+  
+    .logout-btn:hover {  
+      background: #b52a37;  
+    }  
+  
+    .content {  
+      display: grid;  
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));  
+      gap: 20px;  
+    }  
+  
+    .card {  
+      background: #f9f9f9;  
+      border-radius: 14px;  
+      padding: 25px;  
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);  
+    }  
+  
+    .card h3 {  
+      margin-top: 0;  
+      font-size: 22px;  
+    }  
+  
+    .card p {  
+      color: #555;  
+      font-size: 16px;  
+    }  
+  </style>  </head>  <body>    <div class="dashboard">  
+    <div class="header">  
+      <h1 id="welcomeText">Welcome 👋</h1>  
+      <button class="logout-btn" id="logoutBtn">Logout</button>  
+    </div>  <div class="content">  
+  <div class="card">  
+    <h3>Your Profile</h3>  
+    <p><strong>Name:</strong> <span id="userName">—</span></p>  
+    <p><strong>Email:</strong> <span id="userEmail">—</span></p>  
+  </div>  
+
+  <div class="card">  
+    <h3>Activity</h3>  
+    <p>You are logged in successfully.</p>  
+  </div>  
+
+  <div class="card">  
+    <h3>Settings</h3>  
+    <p>Account settings coming soon.</p>  
+  </div>  
+</div>
+
+  </div>    <script>  
+    // Read user from localStorage  
+    const user = JSON.parse(localStorage.getItem("user"));  
+  
+    // If no user → send back to login  
+    if (!user) {  
+      window.location.href = "login.html";  
+    } else {  
+      document.getElementById("userName").innerText = user.name || "User";  
+      document.getElementById("userEmail").innerText = user.email;  
+      document.getElementById("welcomeText").innerText =  
+        `Welcome, ${user.name || "User"} 👋`;  
+    }  
+  
+    // Logout  
+    document.getElementById("logoutBtn").addEventListener("click", () => {  
+      localStorage.removeItem("user");  
+      window.location.href = "login.html";  
+    });  
+  </script>  </body>  
+</html>
