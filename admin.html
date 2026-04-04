@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+</head>
+<body>
+
+<h2>Admin Panel</h2>
+<button onclick="loadUsers()">Load Users</button>
+
+<table border="1" cellpadding="10" id="userTable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+const token = localStorage.getItem("token");
+const body = document.body;
+
+// ❌ no token
+if (!token) deny();
+
+// 🔥 decode token
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return null;
+  }
+}
+
+const data = parseJwt(token);
+
+// ❌ invalid token
+if (!data) deny();
+
+// 🔐 CHECK ROLE (NOT EMAIL)
+if (data.role !== "admin") {
+  deny();
+}
+
+// ✅ load users
+loadUsers();
+
+// =====================
+
+function deny() {
+  body.innerHTML = "<h2>Access Denied</h2><p>You are not an admin</p>";
+  throw new Error("Blocked");
+}
+
+// =====================
+
+async function loadUsers() {
+  const res = await fetch("http://localhost:3000/users", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  if (!res.ok) {
+    deny();
+    return;
+  }
+
+  const users = await res.json();
+
+  const tbody = document.querySelector("#userTable tbody"); // ✅ FIXED
+  tbody.innerHTML = "";
+
+  users.forEach(u => {
+    const row = `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.name}</td>
+        <td>${u.email}</td>
+        <td>
+          <button onclick="deleteUser(${u.id})">Delete</button>
+        </td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+}
+
+async function deleteUser(id) {
+  await fetch(`http://localhost:3000/user/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  loadUsers();
+}
+</script>
+
+</body>
+</html>

@@ -72,7 +72,6 @@
       box-sizing: border-box;
     }
 
-    /* 🔑 password wrapper */
     .password-wrapper {
       position: relative;
     }
@@ -111,7 +110,6 @@
       text-decoration: none;
     }
 
-    /* 🔴 Error text */
     #errorMsg {
       color: red;
       margin-top: 12px;
@@ -138,7 +136,6 @@
         <input type="text" id="name" placeholder="Full Name" required>
         <input type="email" id="email" placeholder="Email" required>
 
-        <!-- 🔑 Password with eye -->
         <div class="password-wrapper">
           <input type="password" id="password" placeholder="Password" required>
           <span class="toggle-eye" id="toggleEye">👁️</span>
@@ -162,7 +159,9 @@ const errorMsg = document.getElementById("errorMsg");
 const passwordInput = document.getElementById("password");
 const toggleEye = document.getElementById("toggleEye");
 
-/* 👁️ Show / hide password */
+let userEmail = "";
+
+/* 👁 Toggle password */
 toggleEye.addEventListener("click", () => {
   if (passwordInput.type === "password") {
     passwordInput.type = "text";
@@ -181,41 +180,53 @@ form.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const password = passwordInput.value;
 
-  /* 🔐 Password length check */
-  if (password.length < 8) {
-    errorMsg.textContent = "Password must be at least 8 characters long.";
+  userEmail = email;
+
+  if (password.length < 6) {
+    errorMsg.textContent = "Password must be at least 6 characters.";
     errorMsg.style.display = "block";
     return;
   }
 
   try {
-    const res = await fetch(
-      "https://trail-backend-y8vc.onrender.com/signup",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
-      }
-    );
+    const res = await fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
 
     const data = await res.json();
 
     if (!res.ok) {
-      if (data.message === "Email already in use") {
-        errorMsg.textContent = "Email is already in use. Try login.";
-      } else {
-        errorMsg.textContent = "Signup failed. Please try again.";
-      }
+      errorMsg.textContent = data.msg || "Signup failed";
       errorMsg.style.display = "block";
       return;
     }
 
-    // ✅ Success
-    localStorage.setItem("user", JSON.stringify(data.user));
-    window.location.href = "dashboard.html";
+    // 🔥 ASK OTP (no UI change, using prompt)
+    const otp = prompt("Enter OTP sent to your email:");
+
+    if (!otp) return;
+
+    const verifyRes = await fetch("http://localhost:3000/verify-otp", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, otp })
+    });
+
+    const verifyData = await verifyRes.json();
+
+    if (!verifyRes.ok) {
+      errorMsg.textContent = verifyData.msg;
+      errorMsg.style.display = "block";
+      return;
+    }
+
+    alert("Account verified. Please login.");
+    window.location.href = "login.html";
 
   } catch (err) {
-    errorMsg.textContent = "Server error. Please try again.";
+    errorMsg.textContent = "Try again later";
     errorMsg.style.display = "block";
   }
 });
