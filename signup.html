@@ -154,12 +154,12 @@
   </div>
 
 <script>
+const BASE_URL = "https://accountcentre.onrender.com";
+
 const form = document.getElementById("signupForm");
 const errorMsg = document.getElementById("errorMsg");
 const passwordInput = document.getElementById("password");
 const toggleEye = document.getElementById("toggleEye");
-
-let userEmail = "";
 
 /* 👁 Toggle password */
 toggleEye.addEventListener("click", () => {
@@ -180,8 +180,6 @@ form.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const password = passwordInput.value;
 
-  userEmail = email;
-
   if (password.length < 6) {
     errorMsg.textContent = "Password must be at least 6 characters.";
     errorMsg.style.display = "block";
@@ -189,13 +187,19 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await fetch("http://localhost:3000/signup", {
+    // 🔥 SIGNUP
+    const res = await fetch(`${BASE_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password })
     });
 
-    const data = await res.json();
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error("Invalid server response");
+    }
 
     if (!res.ok) {
       errorMsg.textContent = data.msg || "Signup failed";
@@ -203,21 +207,27 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    // 🔥 ASK OTP (no UI change, using prompt)
+    // 🔥 OTP INPUT
     const otp = prompt("Enter OTP sent to your email:");
 
     if (!otp) return;
 
-    const verifyRes = await fetch("http://localhost:3000/verify-otp", {
+    // 🔥 VERIFY OTP
+    const verifyRes = await fetch(`${BASE_URL}/verify-otp`, {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ email, otp })
     });
 
-    const verifyData = await verifyRes.json();
+    let verifyData;
+    try {
+      verifyData = await verifyRes.json();
+    } catch {
+      throw new Error("Invalid verification response");
+    }
 
     if (!verifyRes.ok) {
-      errorMsg.textContent = verifyData.msg;
+      errorMsg.textContent = verifyData.msg || "OTP failed";
       errorMsg.style.display = "block";
       return;
     }
@@ -226,7 +236,10 @@ form.addEventListener("submit", async (e) => {
     window.location.href = "login.html";
 
   } catch (err) {
-    errorMsg.textContent = "Try again later";
+    console.error(err);
+
+    // 🔥 handle Render cold start
+    errorMsg.textContent = "Server starting... try again in a few seconds";
     errorMsg.style.display = "block";
   }
 });
