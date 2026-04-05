@@ -46,23 +46,53 @@
 </div>
 
 <script>
-// get token from URL
+const BASE_URL = "https://accountcentre.onrender.com";
 const params = new URLSearchParams(window.location.search);
 const token = params.get("token");
 
 async function resetPassword() {
-  const password = document.getElementById("password").value;
+  const password = document.getElementById("password").value.trim();
+  const msgEl = document.getElementById("msg");
+  const btn = document.querySelector("button");
 
-  const res = await fetch("http://localhost:3000/reset-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ token, password })
-  });
+  if (!password) {
+    msgEl.style.color = "red";
+    msgEl.innerText = "Enter a password";
+    return;
+  }
 
-  const data = await res.json();
-document.getElementById("msg").innerText = data.msg;
+  btn.disabled = true;
+  btn.innerText = "Updating...";
+  msgEl.style.color = "black";
+  msgEl.innerText = "";
+
+  try {
+    const res = await fetch(`${BASE_URL}/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, password })
+    });
+
+    const data = await res.json();
+    
+    if (res.ok) {
+      msgEl.style.color = "green";
+      msgEl.innerText = "Password updated! Redirecting to login...";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
+    } else {
+      msgEl.style.color = "red";
+      msgEl.innerText = data.msg || "Something went wrong.";
+      btn.disabled = false;
+      btn.innerText = "Update Password";
+    }
+  } catch (err) {
+    msgEl.style.color = "red";
+    msgEl.innerText = "Server error. Try again later.";
+    btn.disabled = false;
+    btn.innerText = "Update Password";
+  }
 }
 </script>
 

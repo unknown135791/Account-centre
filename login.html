@@ -124,6 +124,16 @@
           <a href="signup.html">Sign Up</a>
         </div>
       </form>
+
+      <div id="otpSection" style="display:none; width: 100%; max-width: 520px; text-align: center;">
+        <p style="font-size: 18px; margin-bottom: 15px;">Your account is unverified.</p>
+        <input type="text" id="loginOtp" placeholder="Enter OTP" style="text-align: center; letter-spacing: 4px; font-size: 24px;">
+        <button type="button" id="verifyOtpBtn">Verify Account</button>
+        <div style="margin-top: 15px;">
+          <a href="#" id="resendOtpBtn" style="color: #007bff; text-decoration: none; font-size: 16px;">Resend OTP Email</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -173,10 +183,17 @@
         }
 
         if (!res.ok) {
-          errorMsg.style.color = "red";
           if (data.msg === "Verify email first") {
-            errorMsg.textContent = "Verify your email first (OTP)";
-          } else if (data.msg) {
+            form.style.display = "none";
+            document.getElementById("otpSection").style.display = "block";
+            errorMsg.style.color = "red";
+            errorMsg.textContent = "Provide your OTP from the email, or request a new one below.";
+            errorMsg.style.display = "block";
+            return;
+          }
+
+          errorMsg.style.color = "red";
+          if (data.msg) {
             errorMsg.textContent = data.msg;
           } else {
             errorMsg.textContent = "Login failed";
@@ -208,6 +225,88 @@
         submitBtn.textContent = originalBtnText;
       }
     });
+
+    /* 🔥 LOGIC TO RESEND AND VERIFY OTP FROM LOGIN SCREEN */
+    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+    const resendOtpBtn = document.getElementById("resendOtpBtn");
+
+    resendOtpBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      resendOtpBtn.textContent = "Sending...";
+      resendOtpBtn.style.pointerEvents = "none";
+      
+      try {
+        const res = await fetch(`${BASE_URL}/resend-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+        if (res.ok) {
+          errorMsg.style.color = "green";
+          errorMsg.textContent = "A new OTP was sent your email!";
+        } else {
+          errorMsg.style.color = "red";
+          errorMsg.textContent = "Failed to resend OTP.";
+        }
+      } catch {
+        errorMsg.style.color = "red";
+        errorMsg.textContent = "Server error.";
+      }
+      resendOtpBtn.textContent = "Resend OTP Email";
+      resendOtpBtn.style.pointerEvents = "auto";
+    });
+
+    verifyOtpBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const otp = document.getElementById("loginOtp").value.trim();
+
+      if (!otp) {
+        errorMsg.style.color = "red";
+        errorMsg.textContent = "Enter OTP";
+        return;
+      }
+
+      verifyOtpBtn.disabled = true;
+      verifyOtpBtn.textContent = "Verifying...";
+
+      try {
+        const res = await fetch(`${BASE_URL}/verify-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, otp })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorMsg.style.color = "red";
+          errorMsg.textContent = data.msg || "OTP failed";
+          verifyOtpBtn.disabled = false;
+          verifyOtpBtn.textContent = "Verify Account";
+          return;
+        }
+
+        errorMsg.style.color = "green";
+        errorMsg.textContent = "Verified! Redirecting to login...";
+        
+        // Hide OTP section, bring back login
+        setTimeout(() => {
+          document.getElementById("otpSection").style.display = "none";
+          form.style.display = "block";
+          document.getElementById("password").value = "";
+          form.querySelector('button[type="submit"]').disabled = false;
+          form.querySelector('button[type="submit"]').textContent = "Login";
+          errorMsg.style.display = "none";
+        }, 1500);
+
+      } catch (err) {
+        errorMsg.style.color = "red";
+        errorMsg.textContent = "Verification error";
+        verifyOtpBtn.disabled = false;
+        verifyOtpBtn.textContent = "Verify Account";
+      }
+    });
+
   </script>
 
 </body>

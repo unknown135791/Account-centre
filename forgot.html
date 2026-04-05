@@ -46,19 +46,49 @@
 </div>
 
 <script>
+const BASE_URL = "https://accountcentre.onrender.com";
+
 async function sendReset() {
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
+  const msgEl = document.getElementById("msg");
+  const btn = document.querySelector("button");
 
-  const res = await fetch("http://localhost:3000/forgot-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email })
-  });
+  if (!email) {
+    msgEl.style.color = "red";
+    msgEl.innerText = "Enter your email";
+    return;
+  }
 
-  const text = await res.text();
-  document.getElementById("msg").innerText = text;
+  btn.disabled = true;
+  btn.innerText = "Sending...";
+  msgEl.style.color = "black";
+  msgEl.innerText = "";
+
+  try {
+    const res = await fetch(`${BASE_URL}/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    
+    if (res.ok) {
+      msgEl.style.color = "green";
+      msgEl.innerText = data.msg || "Check your email for the reset link!";
+      btn.innerText = "Sent!";
+    } else {
+      msgEl.style.color = "red";
+      msgEl.innerText = data.msg || "Something went wrong.";
+      btn.disabled = false;
+      btn.innerText = "Send Reset Link";
+    }
+  } catch (err) {
+    msgEl.style.color = "red";
+    msgEl.innerText = "Server error. Try again later.";
+    btn.disabled = false;
+    btn.innerText = "Send Reset Link";
+  }
 }
 </script>
 
