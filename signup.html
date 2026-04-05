@@ -181,8 +181,12 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorMsg.style.display = "none";
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
+  const nameInputEl = document.getElementById("name");
+  const emailInputEl = document.getElementById("email");
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  const name = nameInputEl.value.trim();
+  const email = emailInputEl.value.trim();
   const password = passwordInput.value;
 
   if (password.length < 6) {
@@ -190,6 +194,11 @@ form.addEventListener("submit", async (e) => {
     errorMsg.style.display = "block";
     return;
   }
+
+  // UX: Loading state
+  const originalBtnText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending OTP...";
 
   try {
     const res = await fetch(`${BASE_URL}/signup`, {
@@ -203,18 +212,29 @@ form.addEventListener("submit", async (e) => {
     if (!res.ok) {
       errorMsg.textContent = data.msg || "Signup failed";
       errorMsg.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
       return;
     }
 
-    // ✅ Show OTP input
+    // ✅ OTP sent: Hide original inputs to prevent confusion, show OTP section
+    nameInputEl.style.display = "none";
+    emailInputEl.style.display = "none";
+    passwordInput.parentElement.style.display = "none"; // hides the wrapper
+    submitBtn.style.display = "none";
+
     document.getElementById("otpSection").style.display = "block";
-    errorMsg.textContent = "OTP sent. Enter below.";
+    
+    errorMsg.style.color = "green";
+    errorMsg.textContent = "OTP sent to your email. Enter it below.";
     errorMsg.style.display = "block";
 
   } catch (err) {
     console.error(err);
-    errorMsg.textContent = "Server starting... try again";
+    errorMsg.textContent = "Server error... try again";
     errorMsg.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
   }
 });
 
@@ -222,12 +242,17 @@ form.addEventListener("submit", async (e) => {
 document.getElementById("verifyBtn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const otp = document.getElementById("otp").value.trim();
+  const verifyBtn = document.getElementById("verifyBtn");
 
   if (!otp) {
+    errorMsg.style.color = "red";
     errorMsg.textContent = "Enter OTP";
     errorMsg.style.display = "block";
     return;
   }
+
+  verifyBtn.disabled = true;
+  verifyBtn.textContent = "Verifying...";
 
   try {
     const res = await fetch(`${BASE_URL}/verify-otp`, {
@@ -239,18 +264,29 @@ document.getElementById("verifyBtn").addEventListener("click", async () => {
     const data = await res.json();
 
     if (!res.ok) {
+      errorMsg.style.color = "red";
       errorMsg.textContent = data.msg || "OTP failed";
       errorMsg.style.display = "block";
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = "Verify OTP";
       return;
     }
 
-    alert("Account verified. Please login.");
-    window.location.href = "login.html";
+    errorMsg.style.color = "green";
+    errorMsg.textContent = "Account verified! Redirecting to login...";
+    errorMsg.style.display = "block";
+    
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 1500);
 
   } catch (err) {
     console.error(err);
+    errorMsg.style.color = "red";
     errorMsg.textContent = "Verification failed";
     errorMsg.style.display = "block";
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verify OTP";
   }
 });
 </script>
