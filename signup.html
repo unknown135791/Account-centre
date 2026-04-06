@@ -208,7 +208,12 @@ button:active {
   </div>
   <span>Sign Up</span>
 </button>
-</div>
+
+        <div id="otpSection" style="display: none; width: 100%;">
+          <p style="font-size: 18px; margin-bottom: 25px; text-align: center; color: #555;">Provide the OTP we just sent via email.</p>
+          <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align: center; letter-spacing: 4px; font-size: 24px;">
+          <button type="button" id="verifyBtn" style="display: block; width: 100%; padding: 20px; font-size: 22px; border-radius: 14px; background: #28a745; color: white; border: none; cursor: pointer; text-align: center; margin-top: 20px; transition: none;">Verify Account</button>
+        </div>
 
         <p id="errorMsg"></p>
 
@@ -281,6 +286,10 @@ form.addEventListener("submit", async (e) => {
     }
 
     // ✅ OTP sent: Hide original inputs to prevent confusion, show OTP section
+    document.querySelector('.google-btn').style.display = "none";
+    document.querySelector('.divider').style.display = "none";
+    document.querySelector('.login-link').style.display = "none";
+    
     nameInputEl.style.display = "none";
     emailInputEl.style.display = "none";
     passwordInput.parentElement.style.display = "none"; // hides the wrapper
