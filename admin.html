@@ -160,8 +160,11 @@ async function updateUser() {
     body: JSON.stringify({ role, is_verified })
   });
 
+  const data = await res.json();
+
   if (!res.ok) {
-    alert("Update failed");
+    alert(data.msg || "Update failed");
+    console.error(data);
     return;
   }
 
