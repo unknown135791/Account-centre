@@ -1,21 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel</title>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f4f4f4;
+  padding: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#editBox {
+  display: none;
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+}
+</style>
+
 </head>
 <body>
 
 <h2>Admin Panel</h2>
-<button onclick="loadUsers()">Load Users</button>
+<button onclick="loadUsers()">Refresh Users</button>
 
-<table border="1" cellpadding="10" id="userTable">
+<!-- EDIT BOX -->
+<div id="editBox">
+  <h3>Edit User</h3>
+
+  <input type="hidden" id="editId">
+
+  <label>Role:</label>
+  <select id="editRole">
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <br><br>
+
+  <label>Verified:</label>
+  <select id="editVerified">
+    <option value="true">Yes</option>
+    <option value="false">No</option>
+  </select>
+
+  <br><br>
+
+  <button onclick="updateUser()">Save</button>
+  <button onclick="closeEdit()">Cancel</button>
+</div>
+
+<table id="userTable">
   <thead>
     <tr>
       <th>ID</th>
       <th>Name</th>
       <th>Email</th>
-      <th>Action</th>
+      <th>Role</th>
+      <th>Verified</th>
+      <th>Created</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -26,10 +89,9 @@ const BASE_URL = "https://accountcentre.onrender.com";
 const token = localStorage.getItem("token");
 const body = document.body;
 
-// ❌ no token
+// ===== AUTH CHECK =====
 if (!token) deny();
 
-// 🔥 decode token
 function parseJwt(token) {
   try {
     return JSON.parse(atob(token.split('.')[1]));
@@ -39,69 +101,94 @@ function parseJwt(token) {
 }
 
 const data = parseJwt(token);
+if (!data || data.role !== "admin") deny();
 
-// ❌ invalid token
-if (!data) deny();
-
-// 🔐 CHECK ROLE (NOT EMAIL)
-if (data.role !== "admin") {
-  deny();
-}
-
-// ✅ load users
-loadUsers();
-
-// =====================
-
-function deny() {
-  body.innerHTML = "<h2>Access Denied</h2><p>You are not an admin</p>";
-  throw new Error("Blocked");
-}
-
-// =====================
-
+// ===== LOAD USERS =====
 async function loadUsers() {
   const res = await fetch(`${BASE_URL}/users`, {
-    headers: {
-      Authorization: "Bearer " + token
-    }
+    headers: { Authorization: "Bearer " + token }
   });
 
-  if (!res.ok) {
-    deny();
-    return;
-  }
+  if (!res.ok) return deny();
 
   const users = await res.json();
-
-  const tbody = document.querySelector("#userTable tbody"); // ✅ FIXED
+  const tbody = document.querySelector("#userTable tbody");
   tbody.innerHTML = "";
 
   users.forEach(u => {
-    const row = `
+    tbody.innerHTML += `
       <tr>
         <td>${u.id}</td>
         <td>${u.name}</td>
         <td>${u.email}</td>
+        <td>${u.role}</td>
+        <td>${u.is_verified ? "Yes" : "No"}</td>
+        <td>${new Date(u.created_at).toLocaleString()}</td>
         <td>
+          <button onclick="editUser(${u.id}, '${u.role}', ${u.is_verified})">Edit</button>
           <button onclick="deleteUser(${u.id})">Delete</button>
         </td>
       </tr>
     `;
-    tbody.innerHTML += row;
   });
 }
 
+// ===== EDIT =====
+function editUser(id, role, verified) {
+  document.getElementById("editBox").style.display = "block";
+  document.getElementById("editId").value = id;
+  document.getElementById("editRole").value = role;
+  document.getElementById("editVerified").value = verified;
+}
+
+function closeEdit() {
+  document.getElementById("editBox").style.display = "none";
+}
+
+// ===== UPDATE =====
+async function updateUser() {
+  const id = document.getElementById("editId").value;
+  const role = document.getElementById("editRole").value;
+  const is_verified = document.getElementById("editVerified").value === "true";
+
+  const res = await fetch(`${BASE_URL}/user/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ role, is_verified })
+  });
+
+  if (!res.ok) {
+    alert("Update failed");
+    return;
+  }
+
+  closeEdit();
+  loadUsers();
+}
+
+// ===== DELETE =====
 async function deleteUser(id) {
+  if (!confirm("Delete user?")) return;
+
   await fetch(`${BASE_URL}/user/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: "Bearer " + token
-    }
+    headers: { Authorization: "Bearer " + token }
   });
 
   loadUsers();
 }
+
+// ===== DENY =====
+function deny() {
+  body.innerHTML = "<h2>Access Denied</h2>";
+  throw new Error("Blocked");
+}
+
+// auto load
+loadUsers();
 </script>
 
 </body>
