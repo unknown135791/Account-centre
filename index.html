@@ -1,82 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ACCOUNT CENTRE</title>
+<meta charset="UTF-8">
+<title>Account Centre</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* Top page heading */
-    .page-title {
-      text-align: center;
-      margin-top: 200px;
-      font-size: 80px;
-      font-weight: bold;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
 
-    /* Wrapper to center card */
-    .wrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: white;
+}
 
-    /* Card container */
-    .container {
-      background: white;
-      padding: 80px 90px;
-      border-radius: 16px;
-      text-align: center;
-      width: 700px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.18);
-    }
+/* container */
+.container {
+  width: 300px;
+  max-width: 380px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
 
-    .container h2 {
-      font-size: 52px;
-      margin-bottom: 50px;
-    }
+/* logo */
+.logo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;   /* makes it round */
+  object-fit: cover;    /* prevents stretch */
+  display: block;
+  margin: 0 auto 15px;
+  border: 2px solid rgba(255,255,255,0.2); /* subtle premium look */
+}
 
-    a {
-      display: block;
-      text-decoration: none;
-      background: #007bff;
-      color: white;
-      padding: 18px;
-      margin: 25px 0;
-      border-radius: 10px;
-      font-size: 22px;
-    }
+/* title */
+h1 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
 
-    a:hover {
-      background: #0056b3;
-    }
-  </style>
+p {
+  font-size: 13px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+/* buttons */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* colors */
+.btn-primary {
+  background: #3b82f6;
+  color: white; /* 🔥 FIX */
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.15);
+  color: white; /* 🔥 FIX */
+}
+
+/* hover */
+.btn:hover {
+  transform: scale(1.02);
+}
+
+/* 🔥 extra small devices */
+@media (max-width: 400px) {
+  .container {
+    padding: 25px 15px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+.owner {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: -15px;
+}
+.footer {
+  margin-top: 25px;  /* increase from 15px */
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="page-title">ACCOUNT CENTRE</div>
+<div class="app">
 
-  <div class="wrapper">
-    <div class="container">
-      <h2>Connect</h2>
+  <div class="container">
+    <img src="https://accountcentre.netlify.app/account_centre.png" class="logo">
 
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
-    </div>
+    <h1>Account Centre</h1>
+    <p>Secure authentication system</p>
+
+    <a href="login.html" class="btn btn-primary">Login</a>
+    <a href="signup.html" class="btn btn-secondary">Create Account</a>
   </div>
-  <script>
-  const BASE_URL = "https://accountcentre.onrender.com";
-</script>
+
+  <div class="footer">
+    © 2026 Account Centre • Mohit
+  </div>
+
+</div>
 
 </body>
 </html>
