@@ -1,100 +1,265 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Reset Password</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial;
-      background: #f5f5f5;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Centre | Reset Password</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
 
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-    input {
-      padding: 10px;
-      width: 200px;
-      margin: 10px 0;
-    }
+        body {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-y: auto;
+            position: relative;
+        }
 
-    button {
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-  </style>
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .blob-1 { top: -50px; left: -50px; }
+        .blob-2 { bottom: -50px; right: -50px; background: rgba(79, 70, 229, 0.2); }
+
+        .container {
+            background: var(--bg-glass);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 28px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px;
+            z-index: 10;
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--success);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            font-size: 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .toggle-eye {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        #msg {
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-<div class="box">
-  <h2>Reset Password</h2>
+    <div class="container">
+        <div class="logo-icon">
+            <i data-lucide="shield-check"></i>
+        </div>
+        <h2>New Password</h2>
+        <p class="subtitle">Set a secure password to protect your account.</p>
 
-  <input type="password" id="password" placeholder="New password" />
-  <br>
-  <button onclick="resetPassword()">Update Password</button>
+        <div class="form-group">
+            <i data-lucide="lock"></i>
+            <div style="position: relative;">
+                <input type="password" id="password" placeholder="New Password" required>
+                <div class="toggle-eye" id="toggleEye">
+                    <i data-lucide="eye" style="width: 18px;"></i>
+                </div>
+            </div>
+        </div>
 
-  <p id="msg"></p>
-</div>
+        <button onclick="resetPassword()" id="resetBtn">
+            <span>Update Password</span>
+            <i data-lucide="check-circle" style="width: 18px;"></i>
+        </button>
 
-<script>
-const BASE_URL = "https://accountcentre.onrender.com";
-const params = new URLSearchParams(window.location.search);
-const token = params.get("token");
+        <div id="msg"></div>
+    </div>
 
-async function resetPassword() {
-  const password = document.getElementById("password").value.trim();
-  const msgEl = document.getElementById("msg");
-  const btn = document.querySelector("button");
+    <script>
+        const BASE_URL = "https://accountcentre.onrender.com";
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        const passwordInput = document.getElementById("password");
+        const toggleEye = document.getElementById("toggleEye");
 
-  if (!password) {
-    msgEl.style.color = "red";
-    msgEl.innerText = "Enter a password";
-    return;
-  }
+        lucide.createIcons();
 
-  btn.disabled = true;
-  btn.innerText = "Updating...";
-  msgEl.style.color = "black";
-  msgEl.innerText = "";
+        toggleEye.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleEye.innerHTML = '<i data-lucide="eye-off" style="width: 18px;"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleEye.innerHTML = '<i data-lucide="eye" style="width: 18px;"></i>';
+            }
+            lucide.createIcons();
+        });
 
-  try {
-    const res = await fetch(`${BASE_URL}/reset-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, password })
-    });
+        async function resetPassword() {
+            const password = passwordInput.value.trim();
+            const btn = document.getElementById("resetBtn");
 
-    const data = await res.json();
-    
-    if (res.ok) {
-      msgEl.style.color = "green";
-      msgEl.innerText = "Password updated! Redirecting to login...";
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
-    } else {
-      msgEl.style.color = "red";
-      msgEl.innerText = data.msg || "Something went wrong.";
-      btn.disabled = false;
-      btn.innerText = "Update Password";
-    }
-  } catch (err) {
-    msgEl.style.color = "red";
-    msgEl.innerText = "Server error. Try again later.";
-    btn.disabled = false;
-    btn.innerText = "Update Password";
-  }
-}
-</script>
+            if (!password || password.length < 6) {
+                showMessage("Password must be at least 6 characters", "var(--danger)");
+                return;
+            }
 
+            btn.disabled = true;
+            btn.innerHTML = "Updating...";
+
+            try {
+                const res = await fetch(`${BASE_URL}/reset-password`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token, password })
+                });
+
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showMessage("Password updated! Redirecting...", "var(--success)");
+                    setTimeout(() => { window.location.href = "login.html"; }, 1500);
+                } else {
+                    showMessage(data.msg || "Invalid or expired link.", "var(--danger)");
+                    btn.disabled = false;
+                    btn.innerHTML = "Update Password";
+                }
+            } catch (err) {
+                showMessage("Server error. Try again later.", "var(--danger)");
+                btn.disabled = false;
+                btn.innerHTML = "Update Password";
+            }
+        }
+
+        function showMessage(text, color) {
+            const msgEl = document.getElementById("msg");
+            msgEl.style.background = color === "var(--danger)" ? "rgba(239, 68, 68, 0.1)" : "rgba(16, 185, 129, 0.1)";
+            msgEl.style.color = color;
+            msgEl.style.border = `1px solid ${color}`;
+            msgEl.innerText = text;
+            msgEl.style.display = "block";
+        }
+    </script>
 </body>
 </html>

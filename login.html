@@ -1,313 +1,478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Centre | Login</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eaeaea;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-    .container {
-      background: white;
-      width: 100%;
-      max-width: 900px;
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-      padding: 50px 40px;
-      box-sizing: border-box;
-    }
+        body {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-y: auto;
+            position: relative;
+        }
 
-    h2 {
-      font-size: 42px;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+        /* Abstract Background Blobs */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            animation: move 20s infinite alternate;
+        }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .blob-1 { top: -100px; left: -100px; }
+        .blob-2 { bottom: -100px; right: -100px; background: rgba(79, 70, 229, 0.2); }
 
-    form {
-      width: 100%;
-      max-width: 520px;
-    }
+        @keyframes move {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100px, 100px); }
+        }
 
-    input {
-      width: 100%;
-      padding: 18px;
-      margin: 14px 0;
-      font-size: 18px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
+        .container {
+            background: var(--bg-glass);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 28px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 48px 40px;
+            z-index: 10;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    .password-wrapper {
-      position: relative;
-    }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .toggle-eye {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      user-select: none;
-      color: #555;
-    }
+        .logo-area {
+            text-align: center;
+            margin-bottom: 32px;
+        }
 
-    button[type="submit"] {
-      width: 100%;
-      padding: 20px;
-      font-size: 22px;
-      border-radius: 14px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-top: 20px;
-    }
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            color: white;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+        }
 
-    .signup-link, .forgot-link {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 16px;
-    }
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
 
-    #errorMsg {
-      color: red;
-      margin-top: 12px;
-      font-size: 15px;
-      display: none;
-    }
-  </style>
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-top: 8px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            font-size: 15px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: rgba(248, 250, 252, 0.8);
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-eye {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .toggle-eye:hover {
+            color: var(--primary);
+        }
+
+        button[type="submit"], #verifyOtpBtn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button[type="submit"]:hover, #verifyOtpBtn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .footer-links {
+            margin-top: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .signup-text {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        #errorMsg {
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* OTP Section styling */
+        #otpSection {
+            animation: fadeIn 0.4s ease;
+        }
+
+        #loginOtp {
+            text-align: center;
+            letter-spacing: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            padding-left: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-  <div class="container">
-    <h2>Welcome Back</h2>
-
-    <div class="content">
-
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="Email" required>
-        
-        <div class="password-wrapper">
-          <input type="password" id="password" placeholder="Password" required>
-          <span class="toggle-eye" id="toggleEye">👁️</span>
+    <div class="container">
+        <div class="logo-area">
+            <div class="logo-icon">
+                <i data-lucide="shield-check" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Securely access your Account Centre</p>
         </div>
 
-        <button type="submit">Login</button>
+        <form id="loginForm">
+            <div class="form-group">
+                <i data-lucide="mail"></i>
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+            
+            <div class="form-group">
+                <i data-lucide="lock"></i>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <div class="toggle-eye" id="toggleEye">
+                        <i data-lucide="eye" style="width: 20px;"></i>
+                    </div>
+                </div>
+            </div>
 
-        <div class="forgot-link">
-          <a href="forgot.html">Forgot password</a>
+            <button type="submit" id="submitBtn">
+                <span>Login</span>
+                <i data-lucide="arrow-right" style="width: 18px;"></i>
+            </button>
+
+            <div class="footer-links">
+                <a href="forgot.html" class="forgot-link">Forgot password?</a>
+                <div class="signup-text">
+                    Don’t have an account? <a href="signup.html">Create one</a>
+                </div>
+            </div>
+        </form>
+
+        <div id="otpSection" style="display:none; text-align: center;">
+            <p style="font-size: 15px; color: var(--text-main); font-weight: 600; margin-bottom: 20px;">
+                Verification Required
+            </p>
+            <div class="form-group">
+                <input type="text" id="loginOtp" placeholder="000000" maxlength="6">
+            </div>
+            <button type="button" id="verifyOtpBtn">
+                Verify & Continue
+            </button>
+            <div class="footer-links" style="margin-top: 20px;">
+                <a href="#" id="resendOtpBtn">Resend verification code</a>
+            </div>
         </div>
 
-        <p id="errorMsg"></p>
-
-        <div class="signup-link">
-          Don’t have an account?
-          <a href="signup.html">Sign Up</a>
-        </div>
-      </form>
-
-      <div id="otpSection" style="display:none; width: 100%; max-width: 520px; text-align: center;">
-        <p style="font-size: 18px; margin-bottom: 15px;">Your account is unverified.</p>
-        <input type="text" id="loginOtp" placeholder="Enter OTP" style="text-align: center; letter-spacing: 4px; font-size: 24px;">
-        <button type="button" id="verifyOtpBtn">Verify Account</button>
-        <div style="margin-top: 15px;">
-          <a href="#" id="resendOtpBtn" style="color: #007bff; text-decoration: none; font-size: 16px;">Resend OTP Email</a>
-        </div>
-      </div>
-
+        <div id="errorMsg"></div>
     </div>
-  </div>
 
-  <script>
-    const BASE_URL = "https://accountcentre.onrender.com";
+    <script>
+        const BASE_URL = "https://accountcentre.onrender.com";
+        const form = document.getElementById("loginForm");
+        const errorMsg = document.getElementById("errorMsg");
+        const passwordInput = document.getElementById("password");
+        const toggleEye = document.getElementById("toggleEye");
 
-    const form = document.getElementById("loginForm");
-    const errorMsg = document.getElementById("errorMsg");
-    const passwordInput = document.getElementById("password");
-    const toggleEye = document.getElementById("toggleEye");
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
-    /* 👁 Toggle password */
-    toggleEye.addEventListener("click", () => {
-      if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        toggleEye.textContent = "🙈";
-      } else {
-        passwordInput.type = "password";
-        toggleEye.textContent = "👁️";
-      }
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errorMsg.style.display = "none";
-
-      const email = document.getElementById("email").value.trim();
-      const password = passwordInput.value;
-      const submitBtn = form.querySelector('button[type="submit"]');
-
-      const originalBtnText = submitBtn.textContent;
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Logging in...";
-
-      try {
-        const res = await fetch(`${BASE_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
-
-        let data;
-        try {
-          data = await res.json();
-        } catch {
-          throw new Error("Invalid JSON response");
-        }
-
-        if (!res.ok) {
-          if (data.msg === "Verify email first") {
-            form.style.display = "none";
-            document.getElementById("otpSection").style.display = "block";
-            errorMsg.style.color = "red";
-            errorMsg.textContent = "Provide your OTP from the email, or request a new one below.";
+        // 🔥 CHECK FOR REDIRECT MESSAGES
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("msg") === "revoked") {
+            errorMsg.style.background = "rgba(239, 68, 68, 0.1)";
+            errorMsg.style.color = "var(--danger)";
+            errorMsg.style.border = "1px solid rgba(239, 68, 68, 0.2)";
+            errorMsg.textContent = "You are logged out from this device";
             errorMsg.style.display = "block";
-            return;
-          }
-
-          errorMsg.style.color = "red";
-          if (data.msg) {
-            errorMsg.textContent = data.msg;
-          } else {
-            errorMsg.textContent = "Login failed";
-          }
-          errorMsg.style.display = "block";
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText;
-          return;
         }
 
-        errorMsg.style.color = "green";
-        errorMsg.textContent = "Login successful! Redirecting...";
-        errorMsg.style.display = "block";
-
-        // store token
-        localStorage.setItem("token", data.token);
-
-        // redirect smoothly
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1000);
-
-      } catch (err) {
-        console.error(err);
-        errorMsg.style.color = "red";
-        errorMsg.textContent = "Server error or slow startup (try again)";
-        errorMsg.style.display = "block";
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-      }
-    });
-
-    /* 🔥 LOGIC TO RESEND AND VERIFY OTP FROM LOGIN SCREEN */
-    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-    const resendOtpBtn = document.getElementById("resendOtpBtn");
-
-    resendOtpBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      resendOtpBtn.textContent = "Sending...";
-      resendOtpBtn.style.pointerEvents = "none";
-      
-      try {
-        const res = await fetch(`${BASE_URL}/resend-otp`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email })
+        /* 👁 Toggle password */
+        toggleEye.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleEye.innerHTML = '<i data-lucide="eye-off" style="width: 20px;"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleEye.innerHTML = '<i data-lucide="eye" style="width: 20px;"></i>';
+            }
+            lucide.createIcons();
         });
-        if (res.ok) {
-          errorMsg.style.color = "green";
-          errorMsg.textContent = "A new OTP was sent your email!";
-        } else {
-          errorMsg.style.color = "red";
-          errorMsg.textContent = "Failed to resend OTP.";
-        }
-      } catch {
-        errorMsg.style.color = "red";
-        errorMsg.textContent = "Server error.";
-      }
-      resendOtpBtn.textContent = "Resend OTP Email";
-      resendOtpBtn.style.pointerEvents = "auto";
-    });
 
-    verifyOtpBtn.addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const otp = document.getElementById("loginOtp").value.trim();
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorMsg.style.display = "none";
 
-      if (!otp) {
-        errorMsg.style.color = "red";
-        errorMsg.textContent = "Enter OTP";
-        return;
-      }
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value;
+            const submitBtn = document.getElementById("submitBtn");
 
-      verifyOtpBtn.disabled = true;
-      verifyOtpBtn.textContent = "Verifying...";
+            const originalBtnContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Logging in...</span>';
 
-      try {
-        const res = await fetch(`${BASE_URL}/verify-otp`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, otp })
+            try {
+                const res = await fetch(`${BASE_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                let data;
+                try {
+                    data = await res.json();
+                } catch {
+                    throw new Error("Invalid response from server");
+                }
+
+                if (!res.ok) {
+                    if (data.msg === "Verify email first") {
+                        form.style.display = "none";
+                        document.getElementById("otpSection").style.display = "block";
+                        showError("Provide your OTP from the email to verify.", "var(--primary)");
+                        return;
+                    }
+
+                    showError(data.msg || "Login failed", "var(--danger)");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+                    return;
+                }
+
+                showError("Login successful! Redirecting...", "var(--success)");
+                localStorage.setItem("token", data.token);
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+
+            } catch (err) {
+                console.error(err);
+                showError("Server error. Please try again later.", "var(--danger)");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
         });
-        const data = await res.json();
 
-        if (!res.ok) {
-          errorMsg.style.color = "red";
-          errorMsg.textContent = data.msg || "OTP failed";
-          verifyOtpBtn.disabled = false;
-          verifyOtpBtn.textContent = "Verify Account";
-          return;
+        function showError(msg, color) {
+            errorMsg.style.background = color === "var(--danger)" ? "rgba(239, 68, 68, 0.1)" : 
+                                        color === "var(--success)" ? "rgba(16, 185, 129, 0.1)" : "rgba(79, 70, 229, 0.1)";
+            errorMsg.style.color = color;
+            errorMsg.style.border = `1px solid ${color}`;
+            errorMsg.textContent = msg;
+            errorMsg.style.display = "block";
         }
 
-        errorMsg.style.color = "green";
-        errorMsg.textContent = "Verified! Redirecting to login...";
-        
-        // Hide OTP section, bring back login
-        setTimeout(() => {
-          document.getElementById("otpSection").style.display = "none";
-          form.style.display = "block";
-          document.getElementById("password").value = "";
-          form.querySelector('button[type="submit"]').disabled = false;
-          form.querySelector('button[type="submit"]').textContent = "Login";
-          errorMsg.style.display = "none";
-        }, 1500);
+        /* OTP LOGIC */
+        const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+        const resendOtpBtn = document.getElementById("resendOtpBtn");
 
-      } catch (err) {
-        errorMsg.style.color = "red";
-        errorMsg.textContent = "Verification error";
-        verifyOtpBtn.disabled = false;
-        verifyOtpBtn.textContent = "Verify Account";
-      }
-    });
+        resendOtpBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            resendOtpBtn.textContent = "Sending...";
+            
+            try {
+                const res = await fetch(`${BASE_URL}/resend-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+                if (res.ok) {
+                    showError("A new code was sent to your email!", "var(--success)");
+                } else {
+                    showError("Failed to resend code.", "var(--danger)");
+                }
+            } catch {
+                showError("Network error.", "var(--danger)");
+            }
+            resendOtpBtn.textContent = "Resend verification code";
+        });
 
-  </script>
+        verifyOtpBtn.addEventListener("click", async () => {
+            const email = document.getElementById("email").value.trim();
+            const otp = document.getElementById("loginOtp").value.trim();
 
+            if (!otp) return showError("Please enter the 6-digit code", "var(--danger)");
+
+            verifyOtpBtn.disabled = true;
+            verifyOtpBtn.textContent = "Verifying...";
+
+            try {
+                const res = await fetch(`${BASE_URL}/verify-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, otp })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showError(data.msg || "Invalid code", "var(--danger)");
+                    verifyOtpBtn.disabled = false;
+                    verifyOtpBtn.textContent = "Verify & Continue";
+                    return;
+                }
+
+                showError("Account verified! You can now login.", "var(--success)");
+                setTimeout(() => {
+                    document.getElementById("otpSection").style.display = "none";
+                    form.style.display = "block";
+                    document.getElementById("password").value = "";
+                    const submitBtn = document.getElementById("submitBtn");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Login</span><i data-lucide="arrow-right" style="width: 18px;"></i>';
+                    lucide.createIcons();
+                    errorMsg.style.display = "none";
+                }, 2000);
+
+            } catch (err) {
+                showError("Verification error.", "var(--danger)");
+                verifyOtpBtn.disabled = false;
+                verifyOtpBtn.textContent = "Verify & Continue";
+            }
+        });
+    </script>
 </body>
 </html>

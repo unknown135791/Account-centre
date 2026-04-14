@@ -1,367 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Centre | Sign Up</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eaeaea;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-    .container {
-      background: white;
-      width: 100%;
-      max-width: 900px;
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-      padding: 50px 40px;
-      box-sizing: border-box;
-    }
+        body {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-y: auto;
+            position: relative;
+        }
 
-    h2 {
-      font-size: 42px;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+        /* Abstract Background Blobs */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            animation: move 20s infinite alternate;
+        }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .blob-1 { top: -100px; left: -100px; }
+        .blob-2 { bottom: -100px; right: -100px; background: rgba(79, 70, 229, 0.2); }
 
-    .google-btn {
-      width: 100%;
-      max-width: 520px;
-      padding: 20px;
-      font-size: 20px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      background: white;
-      cursor: not-allowed;
-      margin-bottom: 25px;
-    }
+        @keyframes move {
+            from { transform: translate(0, 0); }
+            to { transform: translate(100px, 100px); }
+        }
 
-    .divider {
-      font-size: 18px;
-      margin: 15px 0;
-      color: #888;
-    }
-    /* From Uiverse.io by adamgiebl */ 
-button {
-  font-family: inherit;
-  font-size: 20px;
-  background: royalblue;
-  color: white;
-  padding: 0.7em 1em;
-  padding-left: 0.9em;
-  display: flex;
-  align-items: center;
-  border: none;
-  border-radius: 16px;
-  overflow: hidden;
-  transition: all 0.2s;
-  cursor: pointer;
-}
+        .container {
+            background: var(--bg-glass);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 28px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px;
+            z-index: 10;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-button span {
-  display: block;
-  margin-left: 0.3em;
-  transition: all 0.3s ease-in-out;
-}
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-button svg {
-  display: block;
-  transform-origin: center center;
-  transition: transform 0.3s ease-in-out;
-}
+        .logo-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
 
-button:hover .svg-wrapper {
-  animation: fly-1 0.6s ease-in-out infinite alternate;
-}
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
 
-button:hover svg {
-  transform: translateX(1.2em) rotate(45deg) scale(1.1);
-}
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
 
-button:hover span {
-  transform: translateX(5em);
-}
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 6px;
+        }
 
-button:active {
-  transform: scale(0.95);
-}
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 14px;
+            cursor: not-allowed;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
 
-@keyframes fly-1 {
-  from {
-    transform: translateY(0.1em);
-  }
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
 
-  to {
-    transform: translateY(-0.1em);
-  }
-}
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
 
+        .form-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
 
-    form {
-      width: 100%;
-      max-width: 520px;
-    }
+        .form-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+        }
 
-    input {
-      width: 100%;
-      padding: 18px;
-      margin: 14px 0;
-      font-size: 18px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
+        input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            font-size: 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: rgba(248, 250, 252, 0.8);
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
 
-    .password-wrapper {
-      position: relative;
-    }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
 
-    .toggle-eye {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 18px;
-      user-select: none;
-      color: #555;
-    }
+        .toggle-eye {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+        }
 
-    button[type="submit"] {
-      width: 100%;
-      padding: 20px;
-      font-size: 22px;
-      border-radius: 14px;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-top: 20px;
-    }
+        #signupBtn, #verifyBtn {
+            width: 100%;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-    .login-link {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 16px;
-    }
+        #signupBtn:hover, #verifyBtn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
 
-    .login-link a {
-      color: #007bff;
-      text-decoration: none;
-    }
+        #verifyBtn {
+            background: var(--success);
+        }
 
-    #errorMsg {
-      color: red;
-      margin-top: 12px;
-      font-size: 15px;
-      display: none;
-      text-align: center;
-    }
-  </style>
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #errorMsg {
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+            text-align: center;
+        }
+
+        #loginOtp {
+            text-align: center;
+            letter-spacing: 8px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-  <div class="container">
-    <h2>Create Account</h2>
+    <div class="container">
+        <div id="signupMainArea">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="user-plus" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h2>Create Account</h2>
+                <p class="subtitle">Join the Account Centre community</p>
+            </div>
 
-    <div class="content">
-      <button class="google-btn" disabled>
-        Continue with Google (coming soon)
-      </button>
+            <div class="social-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.908 3.152-1.928 4.176-1.228 1.228-3.14 2.568-7.392 2.568-6.676 0-11.92-5.404-11.92-12.08s5.244-12.08 11.92-12.08c3.612 0 6.204 1.428 8.148 3.272l2.304-2.304c-2.608-2.496-6.104-4.44-11.58-4.44-9.504 0-17.652 7.716-17.652 17.552s8.148 17.552 17.376 17.552c5.292 0 9.292-1.752 12.396-4.992 3.192-3.192 4.188-7.656 4.188-11.196 0-1.056-.096-2.076-.288-3.012h-12.48z" fill="#4285F4"/></svg>
+                Continue with Google
+            </div>
 
-      <div class="divider">or</div>
+            <div class="divider">or use email</div>
 
-      <form id="signupForm">
-        <input type="text" id="name" placeholder="Full Name" required>
-        <input type="email" id="email" placeholder="Email" required>
+            <form id="signupForm">
+                <div class="form-group">
+                    <i data-lucide="user"></i>
+                    <input type="text" id="name" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <i data-lucide="mail"></i>
+                    <input type="email" id="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <i data-lucide="lock"></i>
+                    <div style="position: relative;">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <div class="toggle-eye" id="toggleEye">
+                            <i data-lucide="eye" style="width: 18px;"></i>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="password-wrapper">
-          <input type="password" id="password" placeholder="Password" required>
-          <span class="toggle-eye" id="toggleEye">👁️</span>
-        </div> 
-          <button type="submit" id="signupBtn">
-  <div class="svg-wrapper-1">
-    <div class="svg-wrapper">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-        <path fill="none" d="M0 0h24v24H0z"></path>
-        <path fill="currentColor"
-          d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z">
-        </path>
-      </svg>
-    </div>
-  </div>
-  <span>Sign Up</span>
-</button>
-
-        <div id="otpSection" style="display: none; width: 100%;">
-          <p style="font-size: 18px; margin-bottom: 25px; text-align: center; color: #555;">Provide the OTP we just sent via email.</p>
-          <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align: center; letter-spacing: 4px; font-size: 24px;">
-          <button type="button" id="verifyBtn" style="display: block; width: 100%; padding: 20px; font-size: 22px; border-radius: 14px; background: #28a745; color: white; border: none; cursor: pointer; text-align: center; margin-top: 20px; transition: none;">Verify Account</button>
+                <button type="submit" id="signupBtn">
+                    <span>Sign Up</span>
+                    <i data-lucide="chevron-right" style="width: 18px;"></i>
+                </button>
+            </form>
         </div>
 
-        <p id="errorMsg"></p>
-
-        <div class="login-link">
-          Already have an account?
-          <a href="login.html">Login</a>
+        <div id="otpSection" style="display: none; text-align: center;">
+            <div class="logo-area">
+                <div class="logo-icon" style="background: var(--success);">
+                    <i data-lucide="mail-check" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h2>Verify Email</h2>
+                <p class="subtitle">We've sent a code to your inbox</p>
+            </div>
+            <div class="form-group">
+                <input type="text" id="otp" placeholder="000000" maxlength="6">
+            </div>
+            <button type="button" id="verifyBtn">
+                Verify Account
+            </button>
         </div>
-      </form>
+
+        <div id="errorMsg"></div>
+
+        <div class="footer-links">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
     </div>
-  </div>
 
-<script>
-const BASE_URL = "https://accountcentre.onrender.com";
+    <script>
+        const BASE_URL = "https://accountcentre.onrender.com";
+        const form = document.getElementById("signupForm");
+        const errorMsg = document.getElementById("errorMsg");
+        const passwordInput = document.getElementById("password");
+        const toggleEye = document.getElementById("toggleEye");
 
-const form = document.getElementById("signupForm");
-const errorMsg = document.getElementById("errorMsg");
-const passwordInput = document.getElementById("password");
-const toggleEye = document.getElementById("toggleEye");
+        lucide.createIcons();
 
-/* 👁 Toggle password */
-toggleEye.addEventListener("click", () => {
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    toggleEye.textContent = "🙈";
-  } else {
-    passwordInput.type = "password";
-    toggleEye.textContent = "👁️";
-  }
-});
+        /* 👁 Toggle password */
+        toggleEye.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleEye.innerHTML = '<i data-lucide="eye-off" style="width: 18px;"></i>';
+            } else {
+                passwordInput.type = "password";
+                toggleEye.innerHTML = '<i data-lucide="eye" style="width: 18px;"></i>';
+            }
+            lucide.createIcons();
+        });
 
-/* 🔥 SIGNUP */
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  errorMsg.style.display = "none";
+        function showError(msg, color) {
+            errorMsg.style.background = color === "var(--danger)" ? "rgba(239, 68, 68, 0.1)" : "rgba(16, 185, 129, 0.1)";
+            errorMsg.style.color = color;
+            errorMsg.style.border = `1px solid ${color}`;
+            errorMsg.textContent = msg;
+            errorMsg.style.display = "block";
+        }
 
-  const nameInputEl = document.getElementById("name");
-  const emailInputEl = document.getElementById("email");
-  const submitBtn = form.querySelector('button[type="submit"]');
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            errorMsg.style.display = "none";
 
-  const name = nameInputEl.value.trim();
-  const email = emailInputEl.value.trim();
-  const password = passwordInput.value;
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = passwordInput.value;
+            const submitBtn = document.getElementById("signupBtn");
 
-  if (password.length < 6) {
-    errorMsg.textContent = "Password must be at least 6 characters.";
-    errorMsg.style.display = "block";
-    return;
-  }
+            if (password.length < 6) return showError("Password must be at least 6 characters.", "var(--danger)");
 
-  // UX: Loading state
-  const originalBtnText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Sending OTP...";
+            const originalBtnContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Sending OTP...";
 
-  try {
-    const res = await fetch(`${BASE_URL}/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password })
-    });
+            try {
+                const res = await fetch(`${BASE_URL}/signup`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password })
+                });
 
-    const data = await res.json();
+                const data = await res.json();
 
-    if (!res.ok) {
-      errorMsg.textContent = data.msg || "Signup failed";
-      errorMsg.style.display = "block";
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
-      return;
-    }
+                if (!res.ok) {
+                    showError(data.msg || "Signup failed", "var(--danger)");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+                    return;
+                }
 
-    // ✅ OTP sent: Hide original inputs to prevent confusion, show OTP section
-    document.querySelector('.google-btn').style.display = "none";
-    document.querySelector('.divider').style.display = "none";
-    document.querySelector('.login-link').style.display = "none";
-    
-    nameInputEl.style.display = "none";
-    emailInputEl.style.display = "none";
-    passwordInput.parentElement.style.display = "none"; // hides the wrapper
-    submitBtn.style.display = "none";
+                document.getElementById("signupMainArea").style.display = "none";
+                document.getElementById("otpSection").style.display = "block";
+                showError("Verification code sent!", "var(--success)");
 
-    document.getElementById("otpSection").style.display = "block";
-    
-    errorMsg.style.color = "green";
-    errorMsg.textContent = "OTP sent to your email. Enter it below.";
-    errorMsg.style.display = "block";
+            } catch (err) {
+                showError("Server error. Please try again.", "var(--danger)");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnContent;
+            }
+        });
 
-  } catch (err) {
-    console.error(err);
-    errorMsg.textContent = "Server error... try again";
-    errorMsg.style.display = "block";
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
-  }
-});
+        document.getElementById("verifyBtn").addEventListener("click", async () => {
+            const email = document.getElementById("email").value.trim();
+            const otp = document.getElementById("otp").value.trim();
+            const verifyBtn = document.getElementById("verifyBtn");
 
-/* 🔥 VERIFY OTP */
-document.getElementById("verifyBtn").addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const otp = document.getElementById("otp").value.trim();
-  const verifyBtn = document.getElementById("verifyBtn");
+            if (!otp) return showError("Please enter the code", "var(--danger)");
 
-  if (!otp) {
-    errorMsg.style.color = "red";
-    errorMsg.textContent = "Enter OTP";
-    errorMsg.style.display = "block";
-    return;
-  }
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = "Verifying...";
 
-  verifyBtn.disabled = true;
-  verifyBtn.textContent = "Verifying...";
+            try {
+                const res = await fetch(`${BASE_URL}/verify-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, otp })
+                });
 
-  try {
-    const res = await fetch(`${BASE_URL}/verify-otp`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp })
-    });
+                const data = await res.json();
 
-    const data = await res.json();
+                if (!res.ok) {
+                    showError(data.msg || "Invalid code", "var(--danger)");
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = "Verify Account";
+                    return;
+                }
 
-    if (!res.ok) {
-      errorMsg.style.color = "red";
-      errorMsg.textContent = data.msg || "OTP failed";
-      errorMsg.style.display = "block";
-      verifyBtn.disabled = false;
-      verifyBtn.textContent = "Verify OTP";
-      return;
-    }
+                showError("Verified! Moving to login...", "var(--success)");
+                setTimeout(() => { window.location.href = "login.html"; }, 1500);
 
-    errorMsg.style.color = "green";
-    errorMsg.textContent = "Account verified! Redirecting to login...";
-    errorMsg.style.display = "block";
-    
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 1500);
-
-  } catch (err) {
-    console.error(err);
-    errorMsg.style.color = "red";
-    errorMsg.textContent = "Verification failed";
-    errorMsg.style.display = "block";
-    verifyBtn.disabled = false;
-    verifyBtn.textContent = "Verify OTP";
-  }
-});
-</script>
-
+            } catch (err) {
+                showError("Verification failed.", "var(--danger)");
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = "Verify Account";
+            }
+        });
+    </script>
 </body>
 </html>
