@@ -86,6 +86,24 @@ p {
 .btn:hover {
   transform: scale(1.02);
 }
+  .download-btn{
+    margin-top:18px;
+
+    background:
+        linear-gradient(135deg,#4f46e5,#7c3aed);
+
+    color:white;
+
+    box-shadow:
+        0 10px 25px rgba(99,102,241,.28);
+}
+
+.download-btn:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 18px 40px rgba(99,102,241,.38);
+}
 
 /* 🔥 extra small devices */
 @media (max-width: 400px) {
@@ -123,6 +141,13 @@ p {
 
     <a href="login.html" class="btn btn-primary">Login</a>
     <a href="signup.html" class="btn btn-secondary">Create Account</a>
+    <a 
+   href="https://github.com/unknown135791/Account-centre/releases/download/v1.0/Account.Centre.apk"
+   class="btn download-btn"
+   download
+>
+   Download Android App
+</a>
   </div>
 
   <div class="footer">
