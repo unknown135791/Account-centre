@@ -315,7 +315,13 @@
                 headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
                 body: JSON.stringify({ role: document.getElementById("editRole").value, is_verified: document.getElementById("editVerified").value === "true" })
             });
-            if (res.ok) { closeEdit(); loadUsers(); } else { alert("Update failed."); }
+            if (res.ok) {
+    closeEdit();
+    loadUsers();
+} else {
+    const data = await res.json();
+    alert(data.msg || "Update failed.");
+}
         }
 
         async function deleteUser(id) {
