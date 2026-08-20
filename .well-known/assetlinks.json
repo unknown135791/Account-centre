@@ -5,7 +5,7 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.mohit.accountcentre",
+      "package_name": "com.example.myapp",
       "sha256_cert_fingerprints": [
         "FF:69:36:07:4B:0C:77:A5:5A:08:96:1E:A9:E4:69:8C:5C:F4:7A:D2:93:BA:24:1F:23:7E:4C:A8:F3:E2:EE:64"
       ]
